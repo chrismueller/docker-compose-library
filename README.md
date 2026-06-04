@@ -1,2 +1,1 @@
-# docker-compose-library
-Docker Compose Library
+# Docker Compose Library
