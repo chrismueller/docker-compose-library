@@ -1,0 +1,21 @@
+---
+services:
+  web:
+    image: docker.n8n.io/n8nio/n8n
+    restart: unless-stopped
+    volumes:
+      - data:/home/node/.n8n 
+    networks:
+      - transfer
+    labels:
+      traefik.enable: 'true'
+      traefik.http.routers.n8n.rule: 'Host(`n8n.example.com`)'
+      traefik.http.routers.n8n.entrypoints: 'web'
+      traefik.http.services.n8n.loadbalancer.server.port: '5678'
+
+volumes: 
+  data: 
+
+networks:
+  transfer:
+    external: true
