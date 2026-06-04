@@ -1,0 +1,29 @@
+---
+services:
+  arcane:
+    image: ghcr.io/ofkm/arcane:latest
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - data:/app/data
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - APP_URL=https://arcane.example.com
+      - ENCRYPTION_KEY=<CHANGE_ME>
+      - JWT_SECRET=<CHANGE_ME>
+      - DATABASE_URL=file:data/arcane.db?_pragma=journal_mode(WAL)&_pragma=busy_timeout(2500)&_txlock=immediate
+    networks:
+      - transfer
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.arcane.entrypoints=web
+      - traefik.http.routers.arcane.rule=Host(`arcane.example.com`)
+      - traefik.http.services.arcane.loadbalancer.server.port=3552
+
+networks:
+  transfer:
+    external: true
+
+volumes:
+  data:
